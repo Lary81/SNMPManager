@@ -8,8 +8,6 @@ package snmpmanager;
 /**
  *
  * @author Mateus Athaydes
- * @author Pedro Fontoura
- * @author Carolin
  */
 public class SnmpManager {
     
