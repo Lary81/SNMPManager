@@ -12,6 +12,12 @@ import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.VariableBinding;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 
+/**
+ * 
+ * @author Carolina Nery
+ * @author Mateus Athaydes
+ * @author Pedro Fontoura
+ */
 public class SnmpManager {
 
     public static void main(String[] args) throws IOException {
