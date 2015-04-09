@@ -1,5 +1,6 @@
 package snmpmanager;
 import java.io.IOException;
+//import java.util.ArrayList;
 import org.snmp4j.CommunityTarget;
 import org.snmp4j.PDU;
 import org.snmp4j.Snmp;
@@ -27,22 +28,31 @@ public class SnmpManager {
         pdu.add(new VariableBinding(new OID(new int[]{1, 3, 6, 1, 2, 1, 1, 2})));
         pdu.setType(PDU.GETNEXT);
         
-        Address targetAddress = GenericAddress.parse("udp:255.255.255.255/161");
-        CommunityTarget target = new CommunityTarget();
-        target.setCommunity(new OctetString("public"));
-        target.setAddress(targetAddress);
-        target.setRetries(1);
-        target.setTimeout(5000);
-        target.setVersion(SnmpConstants.version1);
+        //ArrayList<CommunityTarget> enderecosPortal = new ArrayList<CommunityTarget>();
+        //String baseAddress = "udp:10.0.0.";
+        //for(int i = 0; i < 255; i++) {
+            CommunityTarget target = new CommunityTarget();
+            //Address targetAddress = GenericAddress.parse(baseAddress + Integer.toString(i) + "/161");
+            Address targetAddress = GenericAddress.parse("255.255.255.255/161");
+            target.setCommunity(new OctetString("public"));
+            target.setAddress(targetAddress);
+            target.setRetries(1);
+            target.setTimeout(5000);
+            target.setVersion(SnmpConstants.version1);
+            //enderecosPortal.add(target);
+        //}
         
         try {
             Snmp snmp = new Snmp(new DefaultUdpTransportMapping());
             snmp.listen();
-            ResponseEvent response = snmp.send(pdu, target);
-            if (response.getResponse() != null) {
-                System.out.println(response.getPeerAddress());
-                System.out.println(response.getResponse());
-            }
+            //for(CommunityTarget target : enderecosPortal) {
+                System.out.println("Trying " + target.getAddress() + "...");
+                ResponseEvent response = snmp.send(pdu, target);
+                if (response.getResponse() != null) {
+                    System.out.println(response.getPeerAddress());
+                    System.out.println(response.getResponse());
+                }
+            //}
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(99);
