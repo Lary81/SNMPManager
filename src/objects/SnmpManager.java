@@ -19,26 +19,34 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
  * @author Mateus Athaydes
  * @author Pedro Fontoura
  */
-public class SnmpManager {
+public class SnmpManager implements ISnmpManager {
     
     private ArrayList<CommunityTarget> listOfTargets;
     private ArrayList<ResponseEvent> listOfAgents;
+    private String chosenIp = "";
     
     public SnmpManager() {
-        listOfTargets = initializeTargetList();
+        listOfTargets = new ArrayList<>();
         listOfAgents = new ArrayList<ResponseEvent>();
     }
     
-    private ArrayList<CommunityTarget> initializeTargetList() {
+    public ArrayList<CommunityTarget> initializeTargetList(String ipRange1, String ipRange2) {
         ArrayList<CommunityTarget> list = new ArrayList<CommunityTarget>();
         CommunityTarget target = new CommunityTarget();
-        Address targetAddress = new UdpAddress("192.168.25.47"+"/"+"161");
-        target.setCommunity(new OctetString("public"));
-        target.setAddress(targetAddress);
-        target.setRetries(3);
-        target.setTimeout(500);
-        target.setVersion(SnmpConstants.version2c);
-        list.add(target);
+        String rangeIp1[] = ipRange1.split("."); 
+        String rangeIp2[] = ipRange2.split(".");
+        int range1 = Integer.parseInt(rangeIp1[3]); //range1[3] = menor numero do range1 de máquinas
+        int range2 = Integer.parseInt(rangeIp2[3]); //range2[3] = maior numero do range2 de máquinas
+        while(range1 < range2){
+            Address targetAddress = new UdpAddress("192.168.1."+ range1 + "/161");
+            target.setCommunity(new OctetString("public"));
+            target.setAddress(targetAddress);
+            target.setRetries(3);
+            target.setTimeout(500);
+            target.setVersion(SnmpConstants.version2c);
+            list.add(target);
+            range1++;
+        }
         return list;
     }
     
@@ -93,5 +101,8 @@ public class SnmpManager {
     public ArrayList<ResponseEvent> getListOfAgents() {
         return listOfAgents;
     }
-  
+    
+        public void setChosenIp(String chosenIp) {
+        this.chosenIp = chosenIp;
+    } 
 }
