@@ -45,17 +45,17 @@ public class SnmpController {
         return snmpManager.isAgent(community, (ip + "/161"));
     }
 
-    public String snmpFunctionsToString(String community, String function, String object, String ipTarget) {
+    public String snmpFunctionsToString(String community, String function, String object, String ipTarget, String setvalue) {
         String str;
         switch (function) {
             case "GET":
-                str = snmpManager.getObjectAsString(community, object, (ipTarget + "/161"));
+                str = snmpManager.getObjectAsString(object, (ipTarget + "/161"));
                 break;
             case "GETNEXT":
-                str = snmpManager.getNextObjectAsString(community, object, (ipTarget + "/161"));
+                str = snmpManager.getNextObjectAsString(object, (ipTarget + "/161"));
                 break;
             case "SET":
-                str = "";
+                str = snmpManager.setObjectAsString(object, (ipTarget + "/161"), setvalue);
                 break;
             case "GETBULK":
                 str = "";

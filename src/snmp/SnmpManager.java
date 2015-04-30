@@ -31,12 +31,10 @@ public class SnmpManager implements ISnmpManager {
         community = "public";
     }
     
-    @Override
     public void setCommunity(String newCommunity) {
         community = newCommunity;
     }
     
-    @Override
     public String getCommunity() {
         return community;
     }

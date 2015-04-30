@@ -527,15 +527,131 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="328" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="setCommunityLabel" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="setCommunityTextField" min="-2" pref="157" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="setNewValueLabel" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="setNewValueTextField" min="-2" pref="159" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                                  <Component id="setObjectLabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                                  <Component id="setObjectComboBox" min="-2" pref="157" max="-2" attributes="0"/>
+                                  <EmptySpace pref="28" max="32767" attributes="0"/>
+                                  <Component id="SetButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="128" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="setCommunityLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="setCommunityTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="setObjectLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="setObjectComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="SetButton" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="setNewValueLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="setNewValueTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="27" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JButton" name="SetButton">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="SET"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SetButtonActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JLabel" name="setObjectLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Object:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JComboBox" name="setObjectComboBox">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="30">
+                        <StringItem index="0" value="sysDescr"/>
+                        <StringItem index="1" value="sysUpTime"/>
+                        <StringItem index="2" value="sysContact"/>
+                        <StringItem index="3" value="sysName"/>
+                        <StringItem index="4" value="sysLocation"/>
+                        <StringItem index="5" value="ifNumber"/>
+                        <StringItem index="6" value="ifTable"/>
+                        <StringItem index="7" value="ipInReceives"/>
+                        <StringItem index="8" value="ipOutRequests"/>
+                        <StringItem index="9" value="ipRouteTable"/>
+                        <StringItem index="10" value="tcpInSegs"/>
+                        <StringItem index="11" value="tcpOutSegs"/>
+                        <StringItem index="12" value="tcpConnTable"/>
+                        <StringItem index="13" value="udpInDatagrams"/>
+                        <StringItem index="14" value="udpOutDatagrams"/>
+                        <StringItem index="15" value="udpTable"/>
+                        <StringItem index="16" value="icmpInMsgs"/>
+                        <StringItem index="17" value="icmpInEchoReps"/>
+                        <StringItem index="18" value="icmpOutMsgs"/>
+                        <StringItem index="19" value="snmpInPkts"/>
+                        <StringItem index="20" value="snmpOutPkts"/>
+                        <StringItem index="21" value="snmpInBadCommunityName"/>
+                        <StringItem index="22" value="snmpInGetRequests"/>
+                        <StringItem index="23" value="snmpInGetNexts"/>
+                        <StringItem index="24" value="snmpInSetRequests"/>
+                        <StringItem index="25" value="snmpInGetResponses"/>
+                        <StringItem index="26" value="snmpOutGetRequests"/>
+                        <StringItem index="27" value="snmpOutGetNexts"/>
+                        <StringItem index="28" value="snmpOutSetRequests"/>
+                        <StringItem index="29" value="snmpOutGetResponses"/>
+                      </StringArray>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="setCommunityLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Community:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="setCommunityTextField">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="public"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="setNewValueLabel">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="New value: "/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="setNewValueTextField">
+                </Component>
+              </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="getbulkPanel">
               <Constraints>

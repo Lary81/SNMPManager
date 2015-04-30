@@ -60,6 +60,13 @@ public class SnmpGUI extends javax.swing.JFrame {
         getNextCommunityLabel = new javax.swing.JLabel();
         getNextCommunityTextField = new javax.swing.JTextField();
         setPanel = new javax.swing.JPanel();
+        SetButton = new javax.swing.JButton();
+        setObjectLabel = new javax.swing.JLabel();
+        setObjectComboBox = new javax.swing.JComboBox();
+        setCommunityLabel = new javax.swing.JLabel();
+        setCommunityTextField = new javax.swing.JTextField();
+        setNewValueLabel = new javax.swing.JLabel();
+        setNewValueTextField = new javax.swing.JTextField();
         getbulkPanel = new javax.swing.JPanel();
         walkPanel = new javax.swing.JPanel();
         gettablePanel = new javax.swing.JPanel();
@@ -292,15 +299,67 @@ public class SnmpGUI extends javax.swing.JFrame {
 
         functionsPanel.addTab("GETNEXT", getnextPanel);
 
+        SetButton.setText("SET");
+        SetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SetButtonActionPerformed(evt);
+            }
+        });
+
+        setObjectLabel.setText("Object:");
+
+        setObjectComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "sysDescr", "sysUpTime", "sysContact", "sysName", "sysLocation", "ifNumber", "ifTable", "ipInReceives", "ipOutRequests", "ipRouteTable", "tcpInSegs", "tcpOutSegs", "tcpConnTable", "udpInDatagrams", "udpOutDatagrams", "udpTable", "icmpInMsgs", "icmpInEchoReps", "icmpOutMsgs", "snmpInPkts", "snmpOutPkts", "snmpInBadCommunityName", "snmpInGetRequests", "snmpInGetNexts", "snmpInSetRequests", "snmpInGetResponses", "snmpOutGetRequests", "snmpOutGetNexts", "snmpOutSetRequests", "snmpOutGetResponses" }));
+
+        setCommunityLabel.setText("Community:");
+
+        setCommunityTextField.setText("public");
+
+        setNewValueLabel.setText("New value: ");
+
         javax.swing.GroupLayout setPanelLayout = new javax.swing.GroupLayout(setPanel);
         setPanel.setLayout(setPanelLayout);
         setPanelLayout.setHorizontalGroup(
             setPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 328, Short.MAX_VALUE)
+            .addGroup(setPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(setPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(setPanelLayout.createSequentialGroup()
+                        .addGroup(setPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(setPanelLayout.createSequentialGroup()
+                                .addComponent(setCommunityLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(setCommunityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(setPanelLayout.createSequentialGroup()
+                                .addComponent(setNewValueLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(setNewValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(setPanelLayout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(setObjectLabel)
+                        .addGap(23, 23, 23)
+                        .addComponent(setObjectComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addComponent(SetButton)
+                        .addGap(21, 21, 21))))
         );
         setPanelLayout.setVerticalGroup(
             setPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 128, Short.MAX_VALUE)
+            .addGroup(setPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(setPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(setCommunityLabel)
+                    .addComponent(setCommunityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(setPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(setObjectLabel)
+                    .addComponent(setObjectComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(setPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(setNewValueLabel)
+                    .addComponent(setNewValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         functionsPanel.addTab("SET", setPanel);
@@ -402,7 +461,7 @@ public class SnmpGUI extends javax.swing.JFrame {
     private void getButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getButtonActionPerformed
         if(!connectedIpLabel.getText().equals("not connected yet.")) {
             String objectOid = controller.translateObjectToOID(getObjectComboBox.getSelectedItem().toString());
-            consoleTextArea.setText(controller.snmpFunctionsToString(this.getCommunityTextField.getText(), this.getButton.getText(), objectOid, this.connectedIpLabel.getText()));
+            consoleTextArea.setText(controller.snmpFunctionsToString(this.getCommunityTextField.getText(), this.getButton.getText(), objectOid, this.connectedIpLabel.getText(), ""));
         } else {
             JOptionPane.showMessageDialog(this, "Nenhum agente encontra-se conectado no momento.", "Inane error", JOptionPane.ERROR_MESSAGE);
         }
@@ -427,10 +486,9 @@ public class SnmpGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_connectButtonActionPerformed
 
     private void getNextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getNextButtonActionPerformed
-        // TODO add your handling code here:
         if(!connectedIpLabel.getText().equals("not connected yet.")) {
             String objectOid = controller.translateObjectToOID(getNextObjectComboBox.getSelectedItem().toString());
-            consoleTextArea.setText(controller.snmpFunctionsToString(this.community1TextField.getText(), this.getNextButton.getText(), objectOid, this.connectedIpLabel.getText()));
+            consoleTextArea.setText(controller.snmpFunctionsToString(this.community1TextField.getText(), this.getNextButton.getText(), objectOid, this.connectedIpLabel.getText(), ""));
         } else {
             JOptionPane.showMessageDialog(this, "Nenhum agente encontra-se conectado no momento.", "Inane error", JOptionPane.ERROR_MESSAGE);
         }
@@ -439,6 +497,15 @@ public class SnmpGUI extends javax.swing.JFrame {
     private void getNextObjectComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getNextObjectComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_getNextObjectComboBoxActionPerformed
+
+    private void SetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SetButtonActionPerformed
+     if(!connectedIpLabel.getText().equals("not connected yet.")) {
+            String objectOid = controller.translateObjectToOID(getNextObjectComboBox.getSelectedItem().toString());
+            consoleTextArea.setText(controller.snmpFunctionsToString(this.community1TextField.getText(), this.getNextButton.getText(), objectOid, this.connectedIpLabel.getText(), this.setNewValueTextField.getText()));
+        } else {
+            JOptionPane.showMessageDialog(this, "Nenhum agente encontra-se conectado no momento.", "Inane error", JOptionPane.ERROR_MESSAGE);
+        }   
+    }//GEN-LAST:event_SetButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -473,6 +540,7 @@ public class SnmpGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton SetButton;
     private javax.swing.JTextField community1TextField;
     private javax.swing.JLabel communiy1Label;
     private javax.swing.JButton connectButton;
@@ -502,6 +570,12 @@ public class SnmpGUI extends javax.swing.JFrame {
     private javax.swing.JTextField ipTextField;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton netDiscButton;
+    private javax.swing.JLabel setCommunityLabel;
+    private javax.swing.JTextField setCommunityTextField;
+    private javax.swing.JLabel setNewValueLabel;
+    private javax.swing.JTextField setNewValueTextField;
+    private javax.swing.JComboBox setObjectComboBox;
+    private javax.swing.JLabel setObjectLabel;
     private javax.swing.JPanel setPanel;
     private javax.swing.JPanel walkPanel;
     // End of variables declaration//GEN-END:variables

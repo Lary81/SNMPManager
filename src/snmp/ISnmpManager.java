@@ -17,9 +17,11 @@ public interface ISnmpManager {
 
     ArrayList<String> getListOfAgents();
 
-    String getObjectAsString(String community, String objectName, String ipTarget);
+    String getObjectAsString(String oid, String ip);
     
-    String getNextObjectAsString(String community, String oid, String ip);
+    String getNextObjectAsString(String oid, String ip);
+    
+    String setObjectAsString(String oid, String ip, String value);
 
     boolean isAgent(String community, String ipAddress);
     //void setChosenIp(String ip);
