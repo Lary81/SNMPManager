@@ -11,6 +11,7 @@ import org.snmp4j.smi.Address;
 import org.snmp4j.smi.OID;
 import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.UdpAddress;
+import org.snmp4j.smi.Variable;
 import org.snmp4j.smi.VariableBinding;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 
@@ -22,25 +23,33 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
  */
 public class SnmpManager implements ISnmpManager {
 
+    private String community;
     private ArrayList<String> listOfAgents;
 
     public SnmpManager() {
         listOfAgents = new ArrayList<>();
+        community = "public";
+    }
+    
+    @Override
+    public void setCommunity(String newCommunity) {
+        community = newCommunity;
+    }
+    
+    @Override
+    public String getCommunity() {
+        return community;
     }
 
     @Override
     public ArrayList<String> getListOfAgents() {
         return listOfAgents;
     }
-    
-    private void setListOfAgents(ArrayList<String> list) {
-        listOfAgents = list;
-    }
 
     @Override
-    public boolean isAgent(String community, String ip) { // +/161
+    public boolean isAgent(String newCommunity, String ip) { // +/161
         try {
-            CommunityTarget target = buildTarget(community, ip);
+            CommunityTarget target = buildTarget(newCommunity, ip);
             PDU request = new PDU();
             request.setType(PDU.GET);
             OID oid = new OID("1.3.6.1.2.1.1.1.0"); // sysDescr 
@@ -63,11 +72,11 @@ public class SnmpManager implements ISnmpManager {
     }
 
     @Override
-    public void runNetworkDiscovery(String community) {
+    public void runNetworkDiscovery(String newCommunity) {
         ArrayList<String> targetIpAddressList = this.buildTargetIPList();
         ArrayList<String> newListOfAgents = new ArrayList<>();
         for (String ipAddress : targetIpAddressList) {
-            if (this.isAgent(community, ipAddress)) {
+            if (this.isAgent(newCommunity, ipAddress)) {
                 newListOfAgents.add(ipAddress);
             }
         }
@@ -75,7 +84,7 @@ public class SnmpManager implements ISnmpManager {
     }
 
     @Override
-    public String getObjectAsString(String community, String oid, String ip) { // +161
+    public String getObjectAsString(String oid, String ip) { // +161
         try {
             CommunityTarget target = this.buildTarget(community, ip);
             String responseString = "";
@@ -87,8 +96,18 @@ public class SnmpManager implements ISnmpManager {
                 Snmp snmp = new Snmp(new DefaultUdpTransportMapping());
                 snmp.listen();
                 ResponseEvent responseEvent = snmp.send(request, target);
-                if (responseEvent.getResponse() != null) {
-                    responseString = responseEvent.getResponse().getVariableBindings().toString();
+                PDU responsePDU = responseEvent.getResponse();
+                if (responsePDU != null) {
+                    responseString = responsePDU.getVariableBindings().toString();
+                    int errorStatus = responsePDU.getErrorStatus();
+                    int errorIndex = responsePDU.getErrorIndex();
+                    String errorStatusText = responsePDU.getErrorStatusText();
+                    if(errorStatus != PDU.noError) {
+                        responseString = "Error: Request Failed\n" +
+                                        "Error Status = " + errorStatus + "\n" +
+                                        "Error Index = " + errorIndex + "\n" +
+                                        "Error Status Text = " + errorStatusText;
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -100,7 +119,7 @@ public class SnmpManager implements ISnmpManager {
     }
     
     @Override
-    public String getNextObjectAsString(String community, String oid, String ip) { // +161
+    public String getNextObjectAsString(String oid, String ip) { // +161
         try {
             CommunityTarget target = this.buildTarget(community, ip);
             String responseString = "";
@@ -112,8 +131,18 @@ public class SnmpManager implements ISnmpManager {
                 Snmp snmp = new Snmp(new DefaultUdpTransportMapping());
                 snmp.listen();
                 ResponseEvent responseEvent = snmp.send(request, target);
-                if (responseEvent.getResponse() != null) {
-                    responseString = responseEvent.getResponse().getVariableBindings().toString();
+                PDU responsePDU = responseEvent.getResponse();
+                if (responsePDU != null) {
+                    responseString = responsePDU.getVariableBindings().toString();
+                    int errorStatus = responsePDU.getErrorStatus();
+                    int errorIndex = responsePDU.getErrorIndex();
+                    String errorStatusText = responsePDU.getErrorStatusText();
+                    if(errorStatus != PDU.noError) {
+                        responseString = "Error: Request Failed\n" +
+                                        "Error Status = " + errorStatus + "\n" +
+                                        "Error Index = " + errorIndex + "\n" +
+                                        "Error Status Text = " + errorStatusText;
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -123,11 +152,53 @@ public class SnmpManager implements ISnmpManager {
             return "Invalid OID";
         }
     }
+    
+    // TO DO
+    @Override
+    public String setObjectAsString(String oid, String ip, String value) {
+        try {
+            CommunityTarget target = this.buildTarget(community, ip);
+            String responseString = "";
+            PDU request = new PDU();
+            request.setType(PDU.SET);
+            OID oidObj = new OID(oid);
+            Variable var = new OctetString(value);
+            VariableBinding varBind = new VariableBinding(oidObj, var);
+            request.add(varBind);
+            try {
+                Snmp snmp = new Snmp(new DefaultUdpTransportMapping());
+                snmp.listen();
+                ResponseEvent responseEvent = snmp.set(request, target);
+                PDU responsePDU = responseEvent.getResponse();
+                if (responsePDU != null) {
+                    responseString = responsePDU.getVariableBindings().toString();
+                    int errorStatus = responsePDU.getErrorStatus();
+                    int errorIndex = responsePDU.getErrorIndex();
+                    String errorStatusText = responsePDU.getErrorStatusText();
+                    if(errorStatus != PDU.noError) {
+                        responseString = "Error: Request Failed\n" +
+                                        "Error Status = " + errorStatus + "\n" +
+                                        "Error Index = " + errorIndex + "\n" +
+                                        "Error Status Text = " + errorStatusText;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return responseString;
+        } catch (NumberFormatException nfe) {
+            return "Invalid OID";
+        }
+    }
+    
+    private void setListOfAgents(ArrayList<String> list) {
+        listOfAgents = list;
+    }
 
-    private CommunityTarget buildTarget(String community, String ip) { // +/161
+    private CommunityTarget buildTarget(String newCommunity, String ip) { // +/161
         CommunityTarget target = new CommunityTarget();
         Address targetAddress = new UdpAddress(ip);
-        target.setCommunity(new OctetString(community));
+        target.setCommunity(new OctetString(newCommunity));
         target.setAddress(targetAddress);
         target.setRetries(1);
         target.setTimeout(100);
@@ -138,10 +209,10 @@ public class SnmpManager implements ISnmpManager {
     private ArrayList<String> buildTargetIPList() {
         String ip;
         ArrayList<String> list = new ArrayList<>();
-        int lastOctet = 64; // 150
-        while (lastOctet <= 64) { // 239
+        int lastOctet = 16; // 150
+        while (lastOctet <= 16) { // 239
             // 10.32.143.
-            ip = "10.32.148." + Integer.toString(lastOctet) + "/161";
+            ip = "10.0.0." + Integer.toString(lastOctet) + "/161";
             list.add(ip);
             lastOctet++;
         }
